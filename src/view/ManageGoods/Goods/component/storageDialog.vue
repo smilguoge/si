@@ -2,7 +2,7 @@
   <el-drawer
     class="dialog-wrap-ly"
     direction="rtl"
-    size="50%"
+    size="70%"
     close-on-press-escape
     :show-close="false"
     :wrapper-closable="false"
@@ -13,9 +13,17 @@
   >
 
     <el-scrollbar class="scroll-ly" style="height:calc(100% - 70px)">
+      <div class="psty1">
+      <el-button
+        class="filter-item"
+        type="primary"
+      >打印</el-button>
+      <el-button
+        class="filter-item"
+        type="primary"
+      >导出</el-button>
+    </div>
       <div class="dw-wrap">
-        <el-tabs v-model="activeName">
-          <el-tab-pane label="2基础信息" name="dataSet">
             <el-form
               ref="changeData"
               label-position="right"
@@ -25,125 +33,56 @@
               label-width="80px"
             >
               <el-row :gutter="30">
-                <el-col :span="12">
-                  <el-form-item label="项目名称" prop="name">
-                    <el-input v-model="changeData.name" class="input-190" placeholder="请输入项目名称" />
-                  </el-form-item>
+                <el-col :span="7">
+                  单据号：RK19444444444{{}}
                 </el-col>
+                <el-col :span="4">
+                  门店：万达店{{}}
+                </el-col>
+                <el-col :span="5">
+                  操作人：王春燕{{}}
+                </el-col>
+               <el-col :span="8" >
+                  操作时间：2019-10-15 12：20：30{{}}
+                </el-col>
+              </el-row>
+              <el-row :gutter="30">
                 <el-col :span="12">
-                  <el-form-item label="项目类别" prop="project_class_id">
+                  <el-form-item label="入库类型" prop="stock_type">
                     <el-select
-                      v-model="changeData.project_class_id"
-                      class="w100"
+                      v-model="tempdata.stock_type"
                       filterable
                       clearable
-                      placeholder="请选择项目类别"
+                      placeholder="请选择"
                     >
                       <el-option
-                        v-for="item in optionClass"
-                        :key="item.id"
+                        v-for="item in stocklist"
+                        :key="item.code"
                         :label="item.name"
-                        :value="item.id+''"
+                        :value="item.code"
                       />
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="项目简称" prop="short_name">
-                    <el-input v-model="changeData.short_name" placeholder="请输入项目简称" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="ERP编码" prop="erp_code">
-                    <el-input v-model="changeData.erp_code" placeholder="请输入ERP编码" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="有效天数" prop="valid_day">
-                    <el-input v-model="changeData.valid_day" placeholder="请输入有效期（天）" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="项目用时" prop="spen_time">
-                    <el-input v-model="changeData.spen_time" placeholder="请输入项目用时（分钟）" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="项目工耗" prop="hand_price">
-                    <el-input v-model="changeData.hand_price" placeholder="请输入项目工耗" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="销售价格" prop="sell_price">
-                    <el-input v-model="changeData.sell_price" placeholder="请输入项目销售价（元）" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="关联资产" prop="property">
+                  <el-form-item label="对方单位" prop="stock_type">
                     <el-select
-                      v-model="changeData.property"
-                      class="w100"
+                      v-model="tempdata.stock_type"
                       filterable
                       clearable
-                      placeholder="请选择关联资产"
+                      placeholder="请选择"
                     >
                       <el-option
-                        v-for="(item,index) in optionProperty"
-                        :key="index"
-                        :label="item.label"
-                        :value=" item.value + '' "
+                        v-for="item in shoplist"
+                        :key="item.code"
+                        :label="item.name"
+                        :value="item.code"
                       />
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
-                  <el-form-item label="存卡数量" prop="card_count">
-                    <el-input v-model="changeData.card_count" placeholder="请输入存卡数量" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="生效时间" prop="effect_time">
-                    <el-date-picker
-                      v-model="changeData.effect_time"
-                      type="date"
-                      value-format="timestamp"
-                      style="width:100%"
-                      clearable
-                      placeholder="请选择生效时间"
-                    />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="安全库存" prop="safe_stock">
-                    <el-input v-model="changeData.safe_stock" placeholder="请输入安全库存数量" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="关联画像" prop="portrait">
-                    <el-select
-                      v-model="changeData.portrait"
-                      class="w100"
-                      filterable
-                      clearable
-                      placeholder="请选择关联画像"
-                    >
-                      <el-option
-                        v-for="(item,index) in optionPortrait"
-                        :key="index"
-                        :label="item.label"
-                        :value=" item.value + '' "
-                      />
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="项目状态" prop="status">
-                    <el-radio-group v-model="changeData.status">
-                      <el-radio label="1">启用</el-radio>
-                      <el-radio label="0">停用</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                </el-col>
+
+
               </el-row>
               <el-row>
                 <el-col :span="24">
@@ -153,20 +92,12 @@
                 </el-col>
               </el-row>
             </el-form>
-          </el-tab-pane>
-          <el-tab-pane label="商城设置" name="shopSet" disabled>
-            <span>商城设置</span>
-          </el-tab-pane>
-          <el-tab-pane label="物料清单设置" name="listSet" disabled>
-            <span>物料清单设置</span>
-          </el-tab-pane>
-        </el-tabs>
       </div>
 
     </el-scrollbar>
     <div class="drawer-footer">
-      <el-button type="primary" @click="submitForm('changeData')">保 存</el-button>
       <el-button type="danger" @click="handleCancel">取 消</el-button>
+      <el-button type="primary" @click="submitForm('changeData')">保 存</el-button>
     </div>
 
   </el-drawer>
@@ -186,10 +117,30 @@ export default {
     getData: {
       type: Object,
       required: true
+    },
+    stocklist: {
+      type: Array,
+      // default: function () { return [] }
+      default: () => []
     }
+
   },
   data() {
     return {
+      tempdata:{
+        stock_type:1,
+        out_stock:0,
+        purchase_order:'',
+        supplier_id:0,
+        remark:'',
+        detail:{}
+      },
+      shoplist:[
+        {code:1,
+        name:"万达"},
+        {code:2,
+        name:"瑞景"}
+      ],
       drawerVisible: false,
       changeData: {},
       activeName: 'dataSet',
